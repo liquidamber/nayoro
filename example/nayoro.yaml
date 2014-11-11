@@ -1,0 +1,5 @@
+sources:
+  - type: "irc"
+    host: "irc.o-in.dwango.co.jp"
+    port: 6667
+    tls: false

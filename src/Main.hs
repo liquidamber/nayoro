@@ -1,2 +1,8 @@
+import Nayoro.Config
+import System.Environment (getArgs)
+
 main :: IO ()
-main = putStrLn "Hello, world!"
+main = do
+  argv <- getArgs
+  let conf = head argv
+  print =<< loadConfigFromFile conf
