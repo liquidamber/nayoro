@@ -1,5 +1,5 @@
 sources:
-  - type: "irc"
-    host: "irc.o-in.dwango.co.jp"
+  - type: irc
+    host: irc.example.com
     port: 6667
     tls: false
