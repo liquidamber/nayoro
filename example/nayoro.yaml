@@ -3,3 +3,4 @@ sources:
     host: irc.example.com
     port: 6667
     tls: false
+    encoding: UTF-8
