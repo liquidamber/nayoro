@@ -21,12 +21,12 @@ spec = do
         it "should be correctly parsed from minimum config" $
           decodeEither
           "type: \"irc\"\nhost: \"example.com\"\n"
-          `shouldBe` Right (IRCSourceConfig {host="example.com", port=6667, tls=False})
+          `shouldBe` Right (IRCSourceConfig {host="example.com", port=6667, tls=False, encoding="us-ascii"})
         it "should be correctly parsed from maximum config" $
           decodeEither
-            "type: \"irc\"\nhost: \"example.com\"\nport: 12345\ntls: true\n"
+            "type: \"irc\"\nhost: \"example.com\"\nport: 12345\ntls: true\nencoding: UTF-8"
             `shouldBe`
-            Right (IRCSourceConfig {host="example.com", port=12345, tls=True})
+            Right (IRCSourceConfig {host="example.com", port=12345, tls=True, encoding="UTF-8"})
       describe "AppConfig" $ do
         it "should be correctly parsed w/o sources" $
           decodeEither
@@ -36,4 +36,4 @@ spec = do
           decodeEither
           "sources:\n - type: \"irc\"\n   host: \"foo.example.com\"\n - type: \"irc\"\n   host: \"bar.example.com\"\n"
           `shouldBe`
-          Right (AppConfig {sources = [IRCSourceConfig {host = "foo.example.com", port = 6667, tls = False}, IRCSourceConfig {host = "bar.example.com", port = 6667, tls = False}] })
+          Right (AppConfig {sources = [IRCSourceConfig {host = "foo.example.com", port = 6667, tls = False, encoding = "us-ascii"}, IRCSourceConfig {host = "bar.example.com", port = 6667, tls = False, encoding = "us-ascii"}] })

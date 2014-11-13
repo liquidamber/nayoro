@@ -38,6 +38,7 @@ data IdentitySourceConfig
     { host :: Text.Text
     , port :: Int
     , tls :: Bool
+    , encoding :: Text.Text
     }
   deriving (Show, Read, Eq)
 
@@ -54,10 +55,12 @@ parseIRCSource o = do
   host_ <- o .: "host"
   port_ <- o .:? "port" .!= 6667
   tls_ <- o .:? "tls" .!= False
+  encoding_ <- o .:? "encoding" .!= "us-ascii"
   return IRCSourceConfig
     { host = host_
     , port = port_
     , tls = tls_
+    , encoding = encoding_
     }
 
 loadConfigFromFile :: FilePath -> IO (Either Yaml.ParseException AppConfig)
