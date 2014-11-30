@@ -49,6 +49,7 @@ instance Yaml.FromJSON IdentitySourceConfig where
       "irc" -> parseIRCSource o
       _ -> fail $ "unknown source type: " ++ (Text.unpack source_type)
   parseJSON _ = fail "source element should be object"
+-- ここはAlternativeでObject -> Parser (Either String IdentitySourceConfig)に分岐したほうが綺麗な気がする
 
 parseIRCSource :: Yaml.Object -> Yaml.Parser IdentitySourceConfig
 parseIRCSource o = do
