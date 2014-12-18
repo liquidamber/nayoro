@@ -1,10 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 
 module
   Nayoro.ConfigSpec
   ( spec
   ) where
 
+import Text.Heredoc
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 import Data.Yaml.Aeson (decodeEither)
 import Nayoro.Config
@@ -20,20 +22,29 @@ spec = do
       describe "IRCSource" $ do
         it "should be correctly parsed from minimum config" $
           decodeEither
-          "type: \"irc\"\nhost: \"example.com\"\n"
-          `shouldBe` Right (IRCSourceConfig {host="example.com", port=6667, tls=False, encoding="us-ascii"})
+          [str|type: "irc"
+              |host: "example.com"
+              |] `shouldBe` Right (IRCSourceConfig {host="example.com", port=6667, tls=False, encoding="us-ascii"})
         it "should be correctly parsed from maximum config" $
           decodeEither
-            "type: \"irc\"\nhost: \"example.com\"\nport: 12345\ntls: true\nencoding: UTF-8"
-            `shouldBe`
+            [str|type: "irc"
+                |host: "example.com"
+                |port: 12345
+                |tls: true
+                |encoding: UTF-8
+                |] `shouldBe`
             Right (IRCSourceConfig {host="example.com", port=12345, tls=True, encoding="UTF-8"})
       describe "AppConfig" $ do
         it "should be correctly parsed w/o sources" $
           decodeEither
-          "sources:\n"
-          `shouldSatisfy` (isLeft :: Either a AppConfig -> Bool)
+          [str|sources:
+              |] `shouldSatisfy` (isLeft :: Either a AppConfig -> Bool)
         it "should be correctly parsed w/ 2 sources" $
           decodeEither
-          "sources:\n - type: \"irc\"\n   host: \"foo.example.com\"\n - type: \"irc\"\n   host: \"bar.example.com\"\n"
-          `shouldBe`
+          [str|sources:
+              | - type: "irc"
+              |   host: "foo.example.com"
+              | - type: "irc"
+              |   host: "bar.example.com"
+              |] `shouldBe`
           Right (AppConfig {sources = [IRCSourceConfig {host = "foo.example.com", port = 6667, tls = False, encoding = "us-ascii"}, IRCSourceConfig {host = "bar.example.com", port = 6667, tls = False, encoding = "us-ascii"}] })
