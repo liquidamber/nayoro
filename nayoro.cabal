@@ -27,7 +27,7 @@ executable nayoro
                      , Nayoro.Model
                      , Nayoro.Web
                      , Nayoro.Util
-  build-depends:       base >=4.7 && <4.8
+  build-depends:       base >=4.6 && <4.8
                      -- commonly used
                      , array
                      , bytestring
@@ -61,7 +61,7 @@ test-suite spec
   hs-source-dirs:      src test
   main-is:             Spec.hs
   Other-Modules:       Nayoro.ConfigSpec
-  build-depends:       base ==4.7.*
+  build-depends:       base >=4.6
                      , apiary >=1.1
                      , array
                      , bytestring
