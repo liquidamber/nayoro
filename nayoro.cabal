@@ -31,6 +31,7 @@ executable nayoro
                      -- commonly used
                      , array
                      , bytestring
+                     , data-default >= 0.5.3
                      , text
                      , vector
                      -- Nayoro.Config
@@ -65,6 +66,7 @@ test-suite spec
                      , apiary >=1.1
                      , array
                      , bytestring
+                     , data-default >= 0.5.3
                      , text
                      , vector
                      , warp >=3.0

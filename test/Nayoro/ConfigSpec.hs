@@ -18,6 +18,34 @@ isLeft (Right _) = False
 spec :: Spec
 spec = do
   describe "Config" $ do
+    describe "AppConfig" $ do
+        it "should be correctly parsed from minimum config" $
+           decodeEither
+           [str|sources:
+               |  type: "irc"
+               |  host: "example.com"
+               |] `shouldBe`
+           Right (AppConfig { sources=[IRCSourceConfig{host="example.com", port=6667, tls=False, encoding="us-ascii"}], httpConfig = HTTPConfig { httpPort=80} })
+        it "should be correctly parsed from maximum config" $
+           decodeEither
+           [str|sources:
+               |  - type: irc
+               |    host: foo.example.com
+               |  - type: irc
+               |    host: bar.example.com
+               |    port: 12345
+               |    tls: true
+               |    encoding: UTF-8
+               |http:
+               |  port: 3000
+               |] `shouldBe`
+           Right
+           ( AppConfig
+             { sources=
+               [ IRCSourceConfig { host="foo.example.com", port=6667, tls=False, encoding="us-ascii" }
+               , IRCSourceConfig { host="bar.example.com", port=12345, tls=True, encoding="UTF-8" }
+               ],
+               httpConfig = HTTPConfig { httpPort=3000} })
     describe "IdentitySourceConfig" $ do
       describe "IRCSource" $ do
         it "should be correctly parsed from minimum config" $
@@ -47,4 +75,10 @@ spec = do
               | - type: "irc"
               |   host: "bar.example.com"
               |] `shouldBe`
-          Right (AppConfig {sources = [IRCSourceConfig {host = "foo.example.com", port = 6667, tls = False, encoding = "us-ascii"}, IRCSourceConfig {host = "bar.example.com", port = 6667, tls = False, encoding = "us-ascii"}] })
+          Right
+          ( AppConfig
+            { sources =
+              [ IRCSourceConfig {host="foo.example.com", port=6667, tls=False, encoding="us-ascii"}
+              , IRCSourceConfig {host="bar.example.com", port=6667, tls=False, encoding="us-ascii"}
+              ], httpConfig = HTTPConfig
+              { httpPort = 80 }})
